@@ -18,10 +18,10 @@ describe('The Reports API', function() {
                 project_id: config.test.project_id,
                 from: "2015-01-01",
                 to: "2015-12-31"
-            }, function(err, projects){
+            }, function(err, reports){
                 assert(!err, err);
-                assert(Array.isArray(projects));
-                assert.equal(typeof projects[0], "object");
+                assert(Array.isArray(reports));
+                assert.equal(typeof reports[0], "object");
                 done();
             });
         });
@@ -33,10 +33,10 @@ describe('The Reports API', function() {
                 project_id: config.test.project_id,
                 from: "2015-01-01",
                 to: "2015-12-31"
-            }, function(err, projects){
+            }, function(err, reports){
                 assert(!err, err);
-                assert(Array.isArray(projects));
-                assert.equal(typeof projects[0], "object");
+                assert(Array.isArray(reports));
+                assert.equal(typeof reports[0], "object");
                 done();
             });
         });
@@ -53,10 +53,10 @@ describe('The Reports API', function() {
                 is_closed: true,
                 from: "2015-01-01",
                 to: "2015-12-31"
-            }, function(err, projects){
+            }, function(err, reports){
                 assert(!err, err);
-                assert(Array.isArray(projects));
-                assert.equal(typeof projects[0], "object");
+                assert(Array.isArray(reports));
+                assert.equal(typeof reports[0], "object");
                 done();
             });
         });
