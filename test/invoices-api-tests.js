@@ -10,8 +10,29 @@ var assert = require('assert'),
 
 describe('The Invoices API', function() {
     describe('Show recently issued invoices', function() {
+
         it('should implement the list method', function() {
             assert.equal(typeof Invoices.list, "function");
+        });
+
+        var first_invoice;
+        it('should return invoices', function(done) {
+            Invoices.list({}, function(err, invoices) {
+                assert(!err, err);
+                assert(Array.isArray(invoices));
+                assert.equal(typeof invoices[0], "object");
+                first_invoice = invoices[0];
+                done();
+            });
+        });
+        it('should filter invoices', function(done) {
+            Invoices.list({ status:['paid', 'open'] }, function(err, invoices) {
+                assert(!err, err);
+                assert(Array.isArray(invoices));
+                assert.equal(typeof invoices[0], "object");
+                assert.notEqual(invoices[0], first_invoice);
+                done();
+            });
         });
     });
     describe('Show a particular invoice', function() {
