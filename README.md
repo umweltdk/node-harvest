@@ -36,6 +36,10 @@ In order to test you will need to create a config file that uses your credential
         "identifier": "...",
         "secret": "...",
         "user_agent": "node-harvest test runner"
+      },
+      "test":{
+        "project_id": "...",
+        "user_id": "...",
       }
     }
 
