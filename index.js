@@ -1,8 +1,13 @@
 var restler = require('restler'),
-    querystring = require('querystring'),
+    qs = require('qs'),
     util = require('util'),
+    debug = require('debug')('harvest'),
     _isUndefined = require('./mixin'),
     Harvest;
+
+var qs_options = {
+    arrayFormat: 'brackets'
+};
 
 module.exports = Harvest = function (opts) {
     var self = this;
@@ -46,9 +51,9 @@ module.exports = Harvest = function (opts) {
                 'Accept': 'application/json'
             };
 
-            if (data !== 'undefined') {
-                if (data === 'object') {
-                    opts.headers['Content-Length'] = querystring.stringify(data).length;
+            if (typeof data !== 'undefined') {
+                if (typeof data === 'object') {
+                    opts.headers['Content-Length'] = qs.stringify(data, qs_options).length;
                 } else {
                     opts.headers['Content-Length'] = data.length;
                 }
@@ -56,9 +61,12 @@ module.exports = Harvest = function (opts) {
                 opts.headers['Content-Length'] = 0;
             }
 
-            opts.data = data;
             switch (type) {
             case 'get':
+                if (Object.keys(data).length) {
+                    url += '?'+ qs.stringify(data, qs_options);
+                }
+                debug('request url %s', url);
                 return this.get(url, opts);
 
             case 'post':
