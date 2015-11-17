@@ -41,10 +41,11 @@ describe('The TimeTracking API', function() {
             TimeTracking.create({
                 notes: "Boring new text",
                 hours: 2,
-                project_id: '2837810',
-                task_id: '1711152',
+                project_id: config.test.project_id,
+                task_id: config.test.task_id,
                 spent_at: 'Thu, 15 Nov 2012'
             }, function(err, new_entry) {
+                assert(!err);
                 var entry_id = new_entry.id;
 
                 TimeTracking.daily({
@@ -97,7 +98,7 @@ describe('The TimeTracking API', function() {
             assert.equal(typeof TimeTracking.get, "function");
         });
         it('should return an individual timer', function(done) {
-            TimeTracking.get({id: '118593641'}, function(err, timer) {
+            TimeTracking.get({id: config.test.timer_id}, function(err, timer) {
                 assert(!err);
                 assert.equal(typeof timer, "object");
                 assert.equal(typeof timer.id, "number");
@@ -153,8 +154,8 @@ describe('The TimeTracking API', function() {
             TimeTracking.create({
                 notes: "This is a test time entry for the node-harvest client",
                 hours: 3,
-                project_id: '2837810',
-                task_id: '1711152',
+                project_id: config.test.project_id,
+                task_id: config.test.task_id,
                 spent_at: 'Sat, 17 Nov 2012'
             }, function(err, timer) {
                 assert(!err);
@@ -192,8 +193,8 @@ describe('The TimeTracking API', function() {
             TimeTracking.create({
                 notes: "This is a test time entry for the node-harvest client",
                 hours: 3,
-                project_id: '2837810',
-                task_id: '1711152',
+                project_id: config.test.project_id,
+                task_id: config.test.task_id,
                 spent_at: 'Sat, 17 Nov 2012'
             }, function(err, timer) {
                 var entry_id = timer.id;
@@ -215,8 +216,8 @@ describe('The TimeTracking API', function() {
             TimeTracking.create({
                 notes: "Boring new text",
                 hours: 2,
-                project_id: '2837810',
-                task_id: '1711152',
+                project_id: config.test.project_id,
+                task_id: config.test.task_id,
                 spent_at: 'Sun, 18 Nov 2012'
             }, function(err, new_entry) {
                 var entry_id = new_entry.id;
@@ -224,8 +225,8 @@ describe('The TimeTracking API', function() {
                     id: entry_id,
                     notes: "This is a test time entry for the node-harvest client",
                     hours: 3,
-                    project_id: '2837810',
-                    task_id: '1711152',
+                    project_id: config.test.project_id,
+                    task_id: config.test.task_id,
                     spent_at: 'Sun, 18 Nov 2012'
                 }, function(err, entry) {
                     assert(!err);
