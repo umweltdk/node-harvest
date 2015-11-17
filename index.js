@@ -32,7 +32,6 @@ module.exports = Harvest = function (opts) {
     this.identifier = opts.identifier;
     this.secret = opts.secret;
     this.user_agent = opts.user_agent;
-    this.debug = opts.debug || false;
 
     var restService = restler.service(function (u, p) {
         this.defaults.username = u;
@@ -41,9 +40,7 @@ module.exports = Harvest = function (opts) {
         baseURL: self.host
     }, {
         run: function (type, url, data) {
-            if (self.debug) {
-                console.log('run', type, url, data);
-            }
+            debug('run', type, url, data);
 
             var opts = {};
             opts.headers = {
@@ -61,44 +58,29 @@ module.exports = Harvest = function (opts) {
                 opts.headers['Content-Length'] = 0;
             }
 
-            switch (type) {
-            case 'get':
-                if (Object.keys(data).length) {
+            if (type === 'get') {
+                if (Object.keys(data).length)
                     url += '?'+ qs.stringify(data, qs_options);
-                }
-                debug('request url %s', url);
-                return this.get(url, opts);
 
-            case 'post':
-                return this.post(url, opts);
-
-            case 'put':
-                return this.put(url, opts);
-
-            case 'delete':
-                return this.del(url, opts);
+            }else{
+                opts.data = data;
             }
-            return this;
+
+            return this[type](url, opts);
         }
     });
 
     this.processRequest = function (res, cb) {
-        if (this.debug) {
-            console.log('processRequest', cb);
-        }
+        debug('processRequest', cb);
 
         if (typeof cb !== "function") {
             throw new Error('processRequest: Callback is not defined');
         }
 
         res.once('complete', function (data, res) {
-            var err;
+            var err = null;
 
-            if (self.debug) {
-                console.log('complete', util.inspect(data, false, 10));
-            }
-
-            err = null;
+            debug('complete', util.inspect(data, false, 10));
 
             if (res && res.req.method === "DELETE" && res.statusCode) {
                 return cb(err, data);
