@@ -83,9 +83,7 @@ describe('The TimeTracking API', function() {
                     assert.equal(typeof timers.projects[0].tasks[0].id, "number");
                     assert.equal(typeof timers.projects[0].tasks[0].billable, "boolean");
 
-                    TimeTracking.delete({
-                        id: entry_id
-                    }, function(err) {
+                    TimeTracking.delete(entry_id, function(err) {
                         done();
                     });
 
@@ -98,7 +96,7 @@ describe('The TimeTracking API', function() {
             assert.equal(typeof TimeTracking.get, "function");
         });
         it('should return an individual timer', function(done) {
-            TimeTracking.get({id: config.test.timer_id}, function(err, timer) {
+            TimeTracking.get(config.test.timer_id, function(err, timer) {
                 assert(!err);
                 assert.equal(typeof timer, "object");
                 assert.equal(typeof timer.id, "number");
@@ -123,7 +121,7 @@ describe('The TimeTracking API', function() {
             assert.equal(typeof TimeTracking.toggleTimer, "function");
         });
         it('should toggle a timer on and off', function(done) {
-            TimeTracking.toggleTimer({id: '118593641'}, function(err, timer) {
+            TimeTracking.toggleTimer('118593641', function(err, timer) {
                 assert(!err);
                 assert.equal(typeof timer, "object");
                 assert.equal(typeof timer.id, "number");
@@ -199,9 +197,7 @@ describe('The TimeTracking API', function() {
             }, function(err, timer) {
                 var entry_id = timer.id;
 
-                TimeTracking.delete({
-                    id: entry_id
-                }, function(err) {
+                TimeTracking.delete(entry_id, function(err) {
                     assert(!err);
                     done();
                 });
@@ -221,8 +217,7 @@ describe('The TimeTracking API', function() {
                 spent_at: 'Sun, 18 Nov 2012'
             }, function(err, new_entry) {
                 var entry_id = new_entry.id;
-                TimeTracking.update({
-                    id: entry_id,
+                TimeTracking.update(entry_id, {
                     notes: "This is a test time entry for the node-harvest client",
                     hours: 3,
                     project_id: config.test.project_id,
@@ -245,9 +240,7 @@ describe('The TimeTracking API', function() {
                     assert.equal(typeof entry.created_at, "string");
                     assert.equal(typeof entry.updated_at, "string");
 
-                    TimeTracking.delete({
-                        id: entry_id
-                    }, function(err) {
+                    TimeTracking.delete(entry_id, function(err) {
                         done();
                     });
                 });
