@@ -82,7 +82,8 @@ module.exports = Harvest = function (opts) {
             var err = null;
 
             debug('complete', util.inspect(data, false, 10));
-
+        });
+    };
 
     this.service = new restService(this.email, this.password);
     this.throttle = new Throttle(this.throttle_concurrency);
