@@ -1,9 +1,14 @@
 var restler = require('restler'),
-    querystring = require('querystring'),
+    qs = require('qs'),
     util = require('util'),
+    debug = require('debug')('harvest'),
     _isUndefined = require('./mixin'),
     Throttle = require('./throttle.js'),
     Harvest;
+
+var qs_options = {
+    arrayFormat: 'brackets'
+};
 
 module.exports = Harvest = function (opts) {
     var self = this;
@@ -28,8 +33,6 @@ module.exports = Harvest = function (opts) {
     this.identifier = opts.identifier;
     this.secret = opts.secret;
     this.user_agent = opts.user_agent;
-    this.debug = opts.debug || false;
-    this.throttle_concurrency = opts.throttle_concurrency || null;
 
     var restService = restler.service(function (u, p) {
         this.defaults.username = u;
@@ -38,9 +41,7 @@ module.exports = Harvest = function (opts) {
         baseURL: self.host
     }, {
         run: function (type, url, data) {
-            if (self.debug) {
-                console.log('run', type, url, data);
-            }
+            debug('run', type, url, data);
 
             var opts = {};
             opts.headers = {
@@ -50,10 +51,7 @@ module.exports = Harvest = function (opts) {
 
             if (typeof data !== 'undefined') {
                 if (typeof data === 'object') {
-                    // restler uses url encoding to transmit data
-                    // url encoding does not support data types
-                    data = JSON.stringify(data);
-                    opts.headers['Content-Length'] = data.length;
+                    opts.headers['Content-Length'] = qs.stringify(data, qs_options).length;
                 } else {
                     opts.headers['Content-Length'] = data.length;
                 }
@@ -61,24 +59,29 @@ module.exports = Harvest = function (opts) {
                 opts.headers['Content-Length'] = 0;
             }
 
-            opts.data = data;
-            switch (type) {
-            case 'get':
-                return this.get(url, opts);
+            if (type === 'get') {
+                if (Object.keys(data).length)
+                    url += '?'+ qs.stringify(data, qs_options);
 
-            case 'post':
-                return this.post(url, opts);
-
-            case 'put':
-                return this.put(url, opts);
-
-            case 'delete':
-                return this.del(url, opts);
+            }else{
+                opts.data = data;
             }
-            return this;
+
+            return this[type](url, opts);
         }
     });
 
+    this.processRequest = function (res, cb) {
+        debug('processRequest', cb);
+
+        if (typeof cb !== "function") {
+            throw new Error('processRequest: Callback is not defined');
+        }
+
+        res.once('complete', function (data, res) {
+            var err = null;
+
+            debug('complete', util.inspect(data, false, 10));
 
 
     this.service = new restService(this.email, this.password);

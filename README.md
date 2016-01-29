@@ -9,21 +9,33 @@ Harvest is a tool that enables businesses to track time, track projects, manage 
     npm install harvest
 
 # Usage
-
+```javascript
     var Harvest = require('harvest'),
     	harvest = new Harvest({
             subdomain: config.harvest.subdomain,
             email: config.harvest.email,
             password: config.harvest.password
         }),
-        TimeTracking = harvest.TimeTracking;
+        TimeTracking = harvest.TimeTracking,
+        Reports = harvest.Reports;
 
     TimeTracking.daily({}, function(err, tasks) {
         if (err) throw new Error(err);
 
-	// work with tasks
+        // work with tasks
     });
 
+    Reports.timeEntriesByProject({
+        user_id: 123456,
+        project_id: 123456,
+        from: "2015-01-01",
+        to: "2015-12-31"
+    }, function(err, reports){
+        if (err) throw new Error(err);
+        
+        // work with reports
+    });
+```
 # Testing
 
 In order to test you will need to create a config file that uses your credentials inside `config/default.json`
@@ -36,6 +48,10 @@ In order to test you will need to create a config file that uses your credential
         "identifier": "...",
         "secret": "...",
         "user_agent": "node-harvest test runner"
+      },
+      "test":{
+        "project_id": "...",
+        "user_id": "...",
       }
     }
 
@@ -52,3 +68,4 @@ This API is designed to work either using HTTP Basic authentication, or OAuth so
 ## Projects using this library
 
 - [impleri/sow](https://github.com/impleri/sow): Command line time tracking utility
+- [pingsrl/revenue](https://github.com/pingsrl/revenue): Revenue information from harvest

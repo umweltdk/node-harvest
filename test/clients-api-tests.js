@@ -34,7 +34,7 @@ describe('The Clients API', function() {
             assert.equal(typeof Clients.list, "function");
         });
 	it('should provide a list of all clients', function(done) {
-	    Clients.list({}, function(err, clients) {
+	    Clients.list(function(err, clients) {
 		assert(!err);
                 var testClient = undefined;
                 for (var i = 0; i < clients.length; ++i) {
