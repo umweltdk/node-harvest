@@ -108,8 +108,7 @@ module.exports = Harvest = function (opts) {
         }
     };
 
-
-
+    var Analysis = require('./lib/analysis');
     var Account = require('./lib/account');
     var TimeTracking = require('./lib/time-tracking');
     var Clients = require('./lib/clients');
@@ -127,6 +126,7 @@ module.exports = Harvest = function (opts) {
     var InvoicePayments = require('./lib/invoice-payments');
     var InvoiceCategories = require('./lib/invoice-categories');
 
+    this.Analysis = new Analysis(this);
     this.Account = new Account(this);
     this.TimeTracking = new TimeTracking(this);
     this.Clients = new Clients(this);
